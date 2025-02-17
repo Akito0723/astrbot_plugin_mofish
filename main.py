@@ -25,7 +25,7 @@ class Main:
         self.context = context
         self.logger = logging.getLogger("astrbot")
         self.context.register_commands(self.NAMESPACE, "mofish today", "今日摸鱼", 1, self.today_info_desc)
-        self.holiday_process = holiday_process()
+        self.holiday_process = Holiday()
 
 
     async def today_info_desc(self, event: AstrMessageEvent):
