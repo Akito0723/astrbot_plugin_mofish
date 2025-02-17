@@ -19,14 +19,13 @@ HTML = '''
     </span>
 </div>
 '''
-
 class Main:
     def __init__(self, context: Context) -> None:
         self.NAMESPACE = "astrbot_plugin_mofish"
         self.context = context
         self.logger = logging.getLogger("astrbot")
         self.context.register_commands(self.NAMESPACE, "mofish today", "今日摸鱼", 1, self.today_info_desc)
-        self.holiday_process = Holiday()
+        self.holiday_process = holiday_process()
 
 
     async def today_info_desc(self, event: AstrMessageEvent):

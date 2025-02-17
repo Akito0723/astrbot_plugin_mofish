@@ -2,8 +2,8 @@ import aiohttp
 import logging
 import json
 import os
-import asyncio
 import random
+import requests
 from datetime import datetime, timedelta
 
 Hitokoto = ["认认真真地上班，根本不叫赚钱，这是劳动换取报酬。只有偷懒，在上班的时候浑水摸鱼，那才是从你老板那赚到了钱。",
@@ -39,30 +39,31 @@ Hitokoto = ["认认真真地上班，根本不叫赚钱，这是劳动换取报�
             "摸鱼，是职场哲学的一部分；懂摸鱼的人，才是职场高手。",
             "摸鱼是每个打工人的特权，轻松一刻，才有继续工作的力气。"
             ]
+
+
 class Holiday:
     def __init__(self):
         now = datetime.now()
         self.logger = logging.getLogger("astrbot")
         self._holiday_data = {}
-        self._load_holiday(now)
+        self._init_holiday_data(now)
 
     def get_holiday_data(self, now):
         if self._holiday_data.get(now.year) is None:
-            self._load_holiday(now)
+            self._init_holiday_data(now)
         return self._holiday_data.get(now.year)
 
-    def _load_holiday(self, now):
+    def _init_holiday_data(self, now):
         holiday_data_file = f"data/astrbot_plugin_mofish_holiday_{now.year}.json"
         if not os.path.exists(holiday_data_file):
-            asyncio.run(self._init_holiday_data(now, holiday_data_file))
-        with open(holiday_data_file, "r") as f:
-            self._holiday_data = {now.year: json.load(f)}
-
-    async def _init_holiday_data(self, now, holiday_data_file):
-        async with aiohttp.ClientSession() as session:
-            async with session.get(f"http://timor.tech/api/holiday/year/{now.year}?type=Y&week=Y") as response:
+            try:
+                headers = {
+                    'Content-Type': 'application/json',
+                    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36'
+                }
+                response = requests.get(f"http://timor.tech/api/holiday/year/{now.year}?type=Y&week=Y", headers=headers)
                 with open(holiday_data_file, "w") as f:
-                    response_json = await response.json()
+                    response_json = response.json()
                     code = response_json.get('code')
                     if code != 0:
                         self.logger.error(f"获取: {now.year} 假期数据失败, response: {response.json()}")
@@ -70,6 +71,12 @@ class Holiday:
                     else:
                         json.dump(response_json.get("holiday"), f)
                         self.logger.debug(f"获取: {now.year} 假期数据成功")
+            except Exception as e:
+                self.logger.error(f"获取: {now.year} 假期数据出现异常,原因:{e}")
+                self._holiday_data = {}
+                return
+        with open(holiday_data_file, "r") as f:
+            self._holiday_data = {now.year: json.load(f)}
 
     '''获取今日信息'''
     def getTodayDesc(self) -> list:
