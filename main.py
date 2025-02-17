@@ -32,4 +32,6 @@ class Main:
         yield event.plain_result('\n'.join(self.holiday_process.getTodayDesc()))
 
     async def auto_send_mofish_info(self, event: AstrMessageEvent):
+        # todo rss订阅形式获取摸鱼帖子?
+        # 计划支持的热榜 NGA晴风村 v2ex 喜加一
         yield event.plain_result('锐意开发中')
