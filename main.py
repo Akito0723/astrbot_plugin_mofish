@@ -24,7 +24,7 @@ class Main:
         self.NAMESPACE = "astrbot_plugin_mofish"
         self.context = context
         self.logger = logging.getLogger("astrbot")
-        self.context.register_commands(self.NAMESPACE, "mofish today", "今日摸鱼", 1, self.today_info_desc)
+        self.context.register_commands(self.NAMESPACE, "mofish", "今日摸鱼", 1, self.today_info_desc)
         self.holiday_process = Holiday()
 
 
