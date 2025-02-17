@@ -1,6 +1,6 @@
 import logging
 from .holiday import Holiday
-from astrbot.api.all import *
+from astrbot.api.all import Context, AstrMessageEvent, CommandResult, html_renderer
 
 HTML = '''
 <div style="padding: 20px;
@@ -27,7 +27,10 @@ class Main:
         self.context.register_commands(self.NAMESPACE, "mofish", "今日摸鱼", 1, self.today_info_desc)
         self.holiday_process = Holiday()
 
+    async def html_render(self, tmpl: str, data: dict, return_url=True) -> str:
+        '''渲染 HTML'''
+        return await html_renderer.render_custom_template(tmpl, data, return_url=return_url)
 
     async def today_info_desc(self, event: AstrMessageEvent):
-        url = await self.html_render(TMPL, {"items": self.holiday_process.getTodayDesc()})
+        url = await self.html_render(HTML, {"items": self.holiday_process.getTodayDesc()})
         yield event.image_result(url)
