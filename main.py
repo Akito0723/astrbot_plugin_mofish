@@ -1,5 +1,5 @@
 import logging
-from holiday import Holiday
+from .holiday import Holiday
 from astrbot.api.all import Context, AstrMessageEvent, CommandResult
 
 HTML = '''
