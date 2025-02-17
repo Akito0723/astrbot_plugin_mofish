@@ -1,6 +1,6 @@
-name: helloworld # 这是你的插件的唯一识别名。
-desc: 这是 AstrBot 的默认插件，支持关键词回复。 # 插件简短描述
-help: 输入 /keyword 查看关键词回复帮助。 # 插件的帮助信息
-version: v1.3 # 插件版本号。格式：v1.1.1 或者 v1.1
-author: Soulter # 作者
+name: astrbot_plugin_mofish
+desc: 认认真真地上班，根本不叫赚钱，这是劳动换取报酬。只有偷懒，在上班的时候浑水摸鱼，那才是从你老板那赚到了钱。
+help: 输入 /mofish help 查看帮助。
+version: v1.0.0-dev
+author: Akihiro
 repo: https://github.com/Soulter/helloworld # 插件的仓库地址
