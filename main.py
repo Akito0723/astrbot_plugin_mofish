@@ -1,6 +1,6 @@
 import logging
 from .holiday import Holiday
-from astrbot.api.all import Context, AstrMessageEvent, CommandResult
+from astrbot.api.all import *
 
 HTML = '''
 <div style="padding: 20px;
