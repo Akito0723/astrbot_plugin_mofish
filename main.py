@@ -28,27 +28,23 @@ class Main:
                                 ])
         self.logger.info(args)
         if len(args) < 2:
-            yield event.plain_result("指令错误喵~")
-            return
+            return CommandResult().message("指令错误喵~").use_t2i(False)
         if args[1] == "today":
+            self.logger.info("today")
             self.today_info_desc(event)
-            return
-        if args[1] == "hot_nga":
+        elif args[1] == "hot_nga":
+            self.logger.info("hot_nga")
             self.send_nga_hot(event)
-            return
-        if args[1] == "hot_v2ex":
-            self.send_v2ex_hot(event)
-            return
-        if args[1] == "help":
-            CommandResult().message(help_msg).use_t2i(False)
-            return
-        yield event.plain_result("指令错误喵~")
+        elif args[1] == "help":
+            return CommandResult().message(help_msg).use_t2i(False)
+        else:
+            return CommandResult().message("指令错误喵~").use_t2i(False)
 
     def today_info_desc(self, event: AstrMessageEvent):
         yield event.plain_result('\n'.join(self.holiday_process.getTodayDesc()))
 
     async def send_nga_hot(self, event: AstrMessageEvent):
-        hot_arr = self.ngq_qfc.get_hot()
+        hot_arr = await self.ngq_qfc.get_hot()
         content = []
         for hot in hot_arr:
             content.append(Plain(hot))
@@ -60,7 +56,7 @@ class Main:
         yield event.chain_result([node])
 
     async def send_v2ex_hot(self, event: AstrMessageEvent):
-        hot_arr = self.v2ex.get_hot()
+        hot_arr = await self.v2ex.get_hot()
         content = []
         for hot in hot_arr:
             content.append(Plain(hot))
