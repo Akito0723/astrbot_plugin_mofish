@@ -56,7 +56,8 @@ class Main:
             content.append(Plain(hot))
         return CommandResult(chain=[content])
 
-    def send_forward_msg(self, event: AstrMessageEvent, context: Context, hot_arr: list[str], prompt, summary, source):
+    async def send_forward_msg(self, event: AstrMessageEvent, context: Context, hot_arr: list[str],
+                               prompt, summary, source):
         from astrbot.core.platform.sources.aiocqhttp.aiocqhttp_message_event import AiocqhttpMessageEvent
         assert isinstance(event, AiocqhttpMessageEvent)
         # 得到 client
