@@ -46,7 +46,7 @@ class Main:
         hot_arr = await self.ngq_qfc.get_hot()
         content = []
         for hot in hot_arr:
-            content.append(Plain(hot + "\n"))
+            content.append(Plain(hot + "\n\n"))
         return CommandResult(chain=[Node(
             uin=905617992,
             name="Soulter",
@@ -57,7 +57,7 @@ class Main:
         hot_arr = await self.v2ex.get_hot()
         content = []
         for hot in hot_arr:
-            content.append(Plain(hot + "\n"))
+            content.append(Plain(hot + "\n\n"))
         return CommandResult(chain=[Node(
             uin=905617992,
             name="Soulter",
