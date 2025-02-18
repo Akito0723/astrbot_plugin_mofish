@@ -53,10 +53,13 @@ class Main:
 
     async def send_nga_hot(self, event: AstrMessageEvent, context: Context):
         hot_arr = await self.ngq_qfc.get_hot()
+        content = []
+        for hot in hot_arr:
+            content.append(Plain(hot))
         return CommandResult(chain=[Node(
                 uin=905617992,
                 name="Soulter",
-                content=hot_arr
+                content=content
             )])
 
     async def send_v2ex_hot(self, event: AstrMessageEvent, context: Context):
