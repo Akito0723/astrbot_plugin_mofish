@@ -38,6 +38,7 @@ class Main:
                 assert isinstance(event, AiocqhttpMessageEvent)
                 client = event.bot  # 得到 client
                 payloads = {
+                    "user_id": 519226491,
                     "messages": [
                         {
                             "type": "node",
