@@ -27,18 +27,18 @@ class Main:
                                 # '/mofish auto 启动/关闭每日 9 点发送摸鱼信息(锐意开发中)'
                                 ])
         if len(args) < 2:
-            return CommandResult().message(help_msg).use_t2i(False)
+            return CommandResult().message("指令错误喵~").use_t2i(False)
         if args[1] == "today":
             self.today_info_desc(event)
-        if args[1] == "hot_nga":
+        elif args[1] == "hot_nga":
             self.send_nga_hot(event)
-        if args[1] == "hot_v2ex":
+        elif args[1] == "hot_v2ex":
             self.send_v2ex_hot(event)
 
         elif args[1] == "help":
             return CommandResult().message(help_msg).use_t2i(False)
         else:
-            return CommandResult().message(help_msg).use_t2i(False)
+            return CommandResult().message("指令错误喵~").use_t2i(False)
 
     async def today_info_desc(self, event: AstrMessageEvent):
         yield event.plain_result('\n'.join(self.holiday_process.getTodayDesc()))
