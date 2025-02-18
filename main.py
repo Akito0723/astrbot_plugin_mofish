@@ -26,20 +26,25 @@ class Main:
                                 # '/mofish hot_all 所有鱼塘热榜'
                                 # '/mofish auto 启动/关闭每日 9 点发送摸鱼信息(锐意开发中)'
                                 ])
+        self.logger.info(args)
         if len(args) < 2:
-            return CommandResult().message("指令错误喵~").use_t2i(False)
+            yield event.plain_result("指令错误喵~")
+            return
         if args[1] == "today":
-            return self.today_info_desc(event)
+            self.today_info_desc(event)
+            return
         if args[1] == "hot_nga":
-            return self.send_nga_hot(event)
-        elif args[1] == "hot_v2ex":
-            return self.send_v2ex_hot(event)
-        elif args[1] == "help":
-            return CommandResult().message(help_msg).use_t2i(False)
-        else:
-            return CommandResult().message("指令错误喵~").use_t2i(False)
+            self.send_nga_hot(event)
+            return
+        if args[1] == "hot_v2ex":
+            self.send_v2ex_hot(event)
+            return
+        if args[1] == "help":
+            CommandResult().message(help_msg).use_t2i(False)
+            return
+        yield event.plain_result("指令错误喵~")
 
-    async def today_info_desc(self, event: AstrMessageEvent):
+    def today_info_desc(self, event: AstrMessageEvent):
         yield event.plain_result('\n'.join(self.holiday_process.getTodayDesc()))
 
     async def send_nga_hot(self, event: AstrMessageEvent):
