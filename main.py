@@ -28,7 +28,7 @@ class Main:
         if len(args) < 2:
             return CommandResult().message(help_msg)
         if args[1] == "today":
-            return self.today_info_desc(event, context)
+            return await self.today_info_desc(event, context)
         if args[1] == "nga":
             return await self.send_nga_hot(event, context)
         if args[1] == "test":
@@ -42,9 +42,8 @@ class Main:
                     uin=905617992,
                     name="Soulter",
                     content=[Plain("test2")]
-                ),
-            ]
-            return CommandResult(chain=[nodes])
+                )]
+            return CommandResult(chain=nodes)
         if args[1] == "help":
             return CommandResult().message(help_msg)
         return CommandResult().message("指令错误喵~")
@@ -64,7 +63,7 @@ class Main:
                 content=[Plain(hot)]
             )
             nodes.append(node)
-        return CommandResult(chain=[nodes])
+        return CommandResult(chain=nodes)
 
     async def send_v2ex_hot(self, event: AstrMessageEvent, context: Context):
         self.logger.info("send_v2ex_hot")
