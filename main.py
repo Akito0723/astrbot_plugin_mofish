@@ -60,6 +60,27 @@ class Main:
                                     }
                                 ]
                             }
+                        },
+                        {
+                            "type": "node",
+                            "data": {
+                                "user_id": 905617992,
+                                "nickname": "Soulter",
+                                "content": [
+                                    {
+                                        "type": "text",
+                                        "data": {
+                                            "text": "test1"
+                                        }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "data": {
+                                            "text": "test2"
+                                        }
+                                    }
+                                ]
+                            }
                         }
                     ],
                     "prompt": "this is prompt",
