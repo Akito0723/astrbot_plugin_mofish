@@ -32,18 +32,40 @@ class Main:
         if args[1] == "nga":
             return await self.send_nga_hot(event, context)
         if args[1] == "test":
-            nodes = [
-                Node(
-                    uin=905617992,
-                    name="Soulter",
-                    content=[Plain("test1")]
-                ),
-                Node(
-                    uin=905617992,
-                    name="Soulter",
-                    content=[Plain("test2")]
-                )]
-            return CommandResult(chain=nodes)
+            if event.get_platform_name() == "aiocqhttp":
+                # qq
+                from astrbot.core.platform.sources.aiocqhttp.aiocqhttp_message_event import AiocqhttpMessageEvent
+                assert isinstance(event, AiocqhttpMessageEvent)
+                client = event.bot  # 得到 client
+                payloads = {
+                    "messages": [
+                        {
+                            "type": "node",
+                            "data": {
+                                "user_id": 905617992,
+                                "nickname": "Soulter",
+                                "content": [
+                                    {
+                                        "type": "text",
+                                        "data": {
+                                            "text": "test1"
+                                        }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "data": {
+                                            "text": "test2"
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ],
+                    "prompt": "this is prompt",
+                    "summary": "this is summary",
+                    "source": "this is source"
+                }
+                ret = await client.api.call_action('send_forward_msg', **payloads)  # 调用 协议端  API
         if args[1] == "help":
             return CommandResult().message(help_msg)
         return CommandResult().message("指令错误喵~")
