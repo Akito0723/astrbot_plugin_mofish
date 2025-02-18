@@ -26,24 +26,23 @@ class Main:
                                 # '/mofish hot_all 所有鱼塘热榜'
                                 # '/mofish auto 启动/关闭每日 9 点发送摸鱼信息(锐意开发中)'
                                 ])
-        self.logger.info(args)
         if len(args) < 2:
             return CommandResult().message(help_msg)
         if args[1] == "today":
-            self.logger.info("today")
-            return self.today_info_desc(event)
+            return self.today_info_desc(event, context)
         if args[1] == "hot_nga":
-            self.logger.info("hot_nga")
-            return self.send_nga_hot(event)
+            return self.send_nga_hot(event, context)
         if args[1] == "help":
             return CommandResult().message(help_msg)
         return CommandResult().message("指令错误喵~")
 
-    async def today_info_desc(self, event: AstrMessageEvent):
+    def today_info_desc(self, event: AstrMessageEvent, context: Context):
         return CommandResult().message('\n'.join(self.holiday_process.getTodayDesc()))
 
-    async def send_nga_hot(self, event: AstrMessageEvent):
+    async def send_nga_hot(self, event: AstrMessageEvent, context: Context):
+        self.logger.info("send_nga_hot")
         hot_arr = await self.ngq_qfc.get_hot()
+        self.logger.info(hot_arr)
         content = []
         for hot in hot_arr:
             content.append(Plain(hot))
@@ -52,8 +51,10 @@ class Main:
             use_t2i_=False
         )
 
-    async def send_v2ex_hot(self, event: AstrMessageEvent):
+    async def send_v2ex_hot(self, event: AstrMessageEvent, context: Context):
+        self.logger.info("send_v2ex_hot")
         hot_arr = await self.v2ex.get_hot()
+        self.logger.info(hot_arr)
         content = []
         for hot in hot_arr:
             content.append(Plain(hot))
