@@ -28,21 +28,19 @@ class Main:
                                 ])
         self.logger.info(args)
         if len(args) < 2:
-            return CommandResult().message("指令错误喵~").use_t2i(False)
+            return CommandResult().message(help_msg)
         if args[1] == "today":
             self.logger.info("today")
-            self.today_info_desc(event)
-            return
-        elif args[1] == "hot_nga":
+            return self.today_info_desc(event)
+        if args[1] == "hot_nga":
             self.logger.info("hot_nga")
             return self.send_nga_hot(event)
-        elif args[1] == "help":
-            return CommandResult().message(help_msg).use_t2i(False)
-        else:
-            return CommandResult().message("指令错误喵~").use_t2i(False)
+        if args[1] == "help":
+            return CommandResult().message(help_msg)
+        return CommandResult().message("指令错误喵~")
 
-    def today_info_desc(self, event: AstrMessageEvent):
-        yield event.plain_result('\n'.join(self.holiday_process.getTodayDesc()))
+    async def today_info_desc(self, event: AstrMessageEvent):
+        return CommandResult().message('\n'.join(self.holiday_process.getTodayDesc()))
 
     async def send_nga_hot(self, event: AstrMessageEvent):
         hot_arr = await self.ngq_qfc.get_hot()
