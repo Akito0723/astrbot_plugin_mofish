@@ -29,12 +29,11 @@ class Main:
         if len(args) < 2:
             return CommandResult().message("指令错误喵~").use_t2i(False)
         if args[1] == "today":
-            self.today_info_desc(event)
-        elif args[1] == "hot_nga":
-            self.send_nga_hot(event)
+            return self.today_info_desc(event)
+        if args[1] == "hot_nga":
+            return self.send_nga_hot(event)
         elif args[1] == "hot_v2ex":
-            self.send_v2ex_hot(event)
-
+            return self.send_v2ex_hot(event)
         elif args[1] == "help":
             return CommandResult().message(help_msg).use_t2i(False)
         else:
