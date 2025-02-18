@@ -11,7 +11,7 @@ class NGAQFXHotHandler:
         self.hot_url = 'https://momoyu.cc/api/hot/rss?code=OTg='
         self.logger = logging.getLogger("astrbot")
 
-    async def get_hot(self):
+    async def get_hot(self) -> list[str]:
         hot_arr = []
         async with aiohttp.ClientSession() as session:
             async with session.get(self.hot_url) as resp:
@@ -32,8 +32,9 @@ class NGAQFXHotHandler:
                             hot_arr.append(f"标题: {title}")
                             hot_arr.append(f"链接: {url}")
                             hot_arr.append("\n")
+                    return hot_arr
                 except Exception as e:
-                    self.logger.error(f"momoyu rss解析失败,原因:{e}")
+                    self.logger.error(f"momoyu rss解析失败,原因:{repr(e)}")
                     hot_arr = ["momoyu rss解析失败"]
                     return hot_arr
 

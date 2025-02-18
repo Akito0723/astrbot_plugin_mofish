@@ -71,7 +71,7 @@ class Holiday:
                         json.dump(response_json.get("holiday"), f)
                         self.logger.debug(f"获取: {now.year} 假期数据成功")
             except Exception as e:
-                self.logger.error(f"获取: {now.year} 假期数据出现异常,原因:{e}")
+                self.logger.error(f"获取: {now.year} 假期数据出现异常,原因:{repr(e)}")
                 self._holiday_data = {}
                 return
         with open(holiday_data_file, "r") as f:

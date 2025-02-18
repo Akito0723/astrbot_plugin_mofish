@@ -1,7 +1,7 @@
 import logging
 from .holiday import Holiday
-from .v2ex_hot_handler import V2exHotHandler
-from .nga_qfx_hot_handler import NGAQFXHotHandler
+from .hot_handler.v2ex_hot_handler import V2exHotHandler
+from .hot_handler.nga_qfx_hot_handler import NGAQFXHotHandler
 from astrbot.api.all import Context, AstrMessageEvent, CommandResult
 from astrbot.api.message_components import Node, Plain
 
@@ -30,7 +30,7 @@ class Main:
             return CommandResult().message(help_msg)
         if args[1] == "today":
             return self.today_info_desc(event, context)
-        if args[1] == "hot_nga":
+        if args[1] == "nga":
             return self.send_nga_hot(event, context)
         if args[1] == "help":
             return CommandResult().message(help_msg)
@@ -48,7 +48,6 @@ class Main:
             content.append(Plain(hot))
         return CommandResult(
             chain=content,
-            use_t2i_=False
         )
 
     async def send_v2ex_hot(self, event: AstrMessageEvent, context: Context):
@@ -60,5 +59,4 @@ class Main:
             content.append(Plain(hot))
         return CommandResult(
             chain=content,
-            use_t2i_=False
         )
