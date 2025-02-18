@@ -32,9 +32,10 @@ class Main:
         if args[1] == "today":
             self.logger.info("today")
             self.today_info_desc(event)
+            return
         elif args[1] == "hot_nga":
             self.logger.info("hot_nga")
-            self.send_nga_hot(event)
+            return self.send_nga_hot(event)
         elif args[1] == "help":
             return CommandResult().message(help_msg).use_t2i(False)
         else:
@@ -48,21 +49,17 @@ class Main:
         content = []
         for hot in hot_arr:
             content.append(Plain(hot))
-        node = Node(
-            uin=907999195,
-            name="诶嘿bot",
-            content=content
+        return CommandResult(
+            chain=content,
+            use_t2i_=False
         )
-        yield event.chain_result([node])
 
     async def send_v2ex_hot(self, event: AstrMessageEvent):
         hot_arr = await self.v2ex.get_hot()
         content = []
         for hot in hot_arr:
             content.append(Plain(hot))
-        node = Node(
-            uin=907999195,
-            name="诶嘿bot",
-            content=content
+        return CommandResult(
+            chain=content,
+            use_t2i_=False
         )
-        yield event.chain_result([node])
