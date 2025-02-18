@@ -2,8 +2,7 @@ import logging
 from .holiday import Holiday
 from .hot_handler.v2ex_hot_handler import V2exHotHandler
 from .hot_handler.nga_qfx_hot_handler import NGAQFXHotHandler
-from astrbot.api.all import Context, AstrMessageEvent, CommandResult
-from astrbot.api.message_components import Node, Plain
+from astrbot.api.all import Context, AstrMessageEvent, CommandResult, Plain
 
 
 class Main:
@@ -33,7 +32,7 @@ class Main:
         if args[1] == "nga":
             return await self.send_nga_hot(event, context)
         if args[1] == "test":
-            return CommandResult(chain=[Plain(f"测试")])
+            return CommandResult(chain=[Plain(f"测试1"), Plain(f"测试2"), Plain(f"测试3")])
         if args[1] == "help":
             return CommandResult().message(help_msg)
         return CommandResult().message("指令错误喵~")
