@@ -34,13 +34,13 @@ class Main:
         if args[1] == "test":
             nodes = [
                 Node(
-                    uin=907999195,
-                    name="诶嘿bot",
+                    uin=905617992,
+                    name="Soulter",
                     content=[Plain("test1")]
                 ),
                 Node(
-                    uin=907999195,
-                    name="诶嘿bot",
+                    uin=905617992,
+                    name="Soulter",
                     content=[Plain("test2")]
                 ),
             ]
@@ -59,8 +59,8 @@ class Main:
         nodes = []
         for hot in hot_arr:
             node = Node(
-                uin=907999195,
-                name="诶嘿bot",
+                uin=905617992,
+                name="Soulter",
                 content=[Plain(hot)]
             )
             nodes.append(node)
