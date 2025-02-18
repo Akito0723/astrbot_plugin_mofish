@@ -29,7 +29,7 @@ class Main:
         if len(args) < 2:
             return CommandResult().message(help_msg)
         if args[1] == "today":
-            return self.today_info_desc(event, context)
+            return await self.today_info_desc(event, context)
         if args[1] == "nga":
             return await self.send_nga_hot(event, context)
         if args[1] == "help":
@@ -46,7 +46,7 @@ class Main:
         content = []
         for hot in hot_arr:
             content.append(Plain(hot))
-        yield event.chain_result(content)
+        return CommandResult(chain=[content])
 
     async def send_v2ex_hot(self, event: AstrMessageEvent, context: Context):
         self.logger.info("send_v2ex_hot")
@@ -55,4 +55,4 @@ class Main:
         content = []
         for hot in hot_arr:
             content.append(Plain(hot))
-        yield event.chain_result(content)
+        return CommandResult(chain=[content])
