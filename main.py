@@ -1,7 +1,7 @@
 import logging
 from .holiday import Holiday
-from .hot_handler.v2ex_hot_handler import V2exHotHandler
-from .hot_handler.nga_qfx_hot_handler import NGAQFXHotHandler
+from .v2ex_hot_handler import V2exHotHandler
+from .nga_qfx_hot_handler import NGAQFXHotHandler
 from astrbot.api.all import Context, AstrMessageEvent, CommandResult
 from astrbot.api.message_components import Node, Plain
 
