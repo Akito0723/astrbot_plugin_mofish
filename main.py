@@ -28,66 +28,11 @@ class Main:
         if len(args) < 2:
             return CommandResult().message(help_msg)
         if args[1] == "today":
-            return await self.today_info_desc(event, context)
+            return self.today_info_desc(event, context)
         if args[1] == "nga":
             return await self.send_nga_hot(event, context)
         if args[1] == "test":
-            if event.get_platform_name() == "aiocqhttp":
-                # qq
-                from astrbot.core.platform.sources.aiocqhttp.aiocqhttp_message_event import AiocqhttpMessageEvent
-                assert isinstance(event, AiocqhttpMessageEvent)
-                client = event.bot  # 得到 client
-                payloads = {
-                    "user_id": 519226491,
-                    "messages": [
-                        {
-                            "type": "node",
-                            "data": {
-                                "user_id": 905617992,
-                                "nickname": "Soulter",
-                                "content": [
-                                    {
-                                        "type": "text",
-                                        "data": {
-                                            "text": "test1"
-                                        }
-                                    },
-                                    {
-                                        "type": "text",
-                                        "data": {
-                                            "text": "test2"
-                                        }
-                                    }
-                                ]
-                            }
-                        },
-                        {
-                            "type": "node",
-                            "data": {
-                                "user_id": 905617992,
-                                "nickname": "Soulter",
-                                "content": [
-                                    {
-                                        "type": "text",
-                                        "data": {
-                                            "text": "test1"
-                                        }
-                                    },
-                                    {
-                                        "type": "text",
-                                        "data": {
-                                            "text": "test2"
-                                        }
-                                    }
-                                ]
-                            }
-                        }
-                    ],
-                    "prompt": "this is prompt",
-                    "summary": "this is summary",
-                    "source": "this is source"
-                }
-                ret = await client.api.call_action('send_forward_msg', **payloads)  # 调用 协议端  API
+            pass
         if args[1] == "help":
             return CommandResult().message(help_msg)
         return CommandResult().message("指令错误喵~")
@@ -97,14 +42,10 @@ class Main:
 
     async def send_nga_hot(self, event: AstrMessageEvent, context: Context):
         hot_arr = await self.ngq_qfc.get_hot()
-        content = []
-        for hot in hot_arr:
-            content.append(Plain(hot))
-        return CommandResult(chain=[Node(
-                uin=905617992,
-                name="Soulter",
-                content=content
-            )])
+        if event.get_platform_name() == "aiocqhttp":
+            return self.send_forward_msg(event, context, hot_arr, "", "", "NGA热榜")
+        else:
+            return CommandResult().message('\n'.join(hot_arr))
 
     async def send_v2ex_hot(self, event: AstrMessageEvent, context: Context):
         self.logger.info("send_v2ex_hot")
@@ -114,3 +55,32 @@ class Main:
         for hot in hot_arr:
             content.append(Plain(hot))
         return CommandResult(chain=[content])
+
+    def send_forward_msg(self, event: AstrMessageEvent, context: Context, hot_arr: list[str], prompt, summary, source):
+        from astrbot.core.platform.sources.aiocqhttp.aiocqhttp_message_event import AiocqhttpMessageEvent
+        assert isinstance(event, AiocqhttpMessageEvent)
+        # 得到 client
+        client = event.bot
+        group_id = event.message_obj.group_id
+        user_id = event.message_obj.sender.user_id
+
+        messages = []
+        for hot in hot_arr:
+            messages.append({
+                "type": "node",
+                "data": {
+                    "user_id": 905617992,
+                    "nickname": "Soulter",
+                    "content": [{"type": "text", "data": {"text": hot}}]
+                }
+            })
+        payloads = {
+            "user_id": user_id,
+            "group_id": group_id,
+            "messages": messages,
+            "prompt": prompt,
+            "summary": summary,
+            "source": source
+        }
+        # 调用 协议端  API
+        return client.api.call_action('send_forward_msg', **payloads)

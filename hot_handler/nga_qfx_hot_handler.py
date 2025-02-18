@@ -29,7 +29,7 @@ class NGAQFXHotHandler:
                         for a_tag in soup.find_all('a'):
                             url = a_tag.get('href')
                             title = a_tag.text
-                            hot_arr.append(f"标题: {title}\n\n链接: {url}\n\n\n\n")
+                            hot_arr.append(f"标题: {title}\n链接: {url}")
                     return hot_arr
                 except Exception as e:
                     self.logger.error(f"momoyu rss解析失败,原因:{repr(e)}")
