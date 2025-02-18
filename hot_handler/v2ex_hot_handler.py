@@ -29,11 +29,7 @@ class V2exHotHandler:
                             content = item.get('content')
                             if len(content) > 10:
                                 content = content[:10] + '...'
-                            hot_arr.append(f"标题: {title}")
-                            hot_arr.append(f"发帖时间: {created_day}")
-                            hot_arr.append(f"内容: {content}")
-                            hot_arr.append(f"链接: {url}")
-                            hot_arr.append("\n")
+                            hot_arr.append(f"标题: {title}\n发帖时间: {created_day}\n内容: {content}\n链接: {url}")
                         return hot_arr
                     except Exception as e:
                         self.logger.error(f"v2ex api解析失败,原因:{repr(e)}")

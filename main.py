@@ -29,8 +29,10 @@ class Main:
             return CommandResult().message(help_msg)
         if args[1] == "today":
             return self.today_info_desc(event, context)
-        if args[1] == "nga":
+        if args[1] == "hot_nga":
             return await self.send_nga_hot(event, context)
+        if args[1] == "hot_v2ex":
+            return await self.send_v2ex_hot(event, context)
         if args[1] == "test":
             pass
         if args[1] == "help":
@@ -44,7 +46,7 @@ class Main:
         hot_arr = await self.ngq_qfc.get_hot()
         content = []
         for hot in hot_arr:
-            content.append(Plain(hot))
+            content.append(Plain(hot + "\n"))
         return CommandResult(chain=[Node(
             uin=905617992,
             name="Soulter",
@@ -55,7 +57,7 @@ class Main:
         hot_arr = await self.v2ex.get_hot()
         content = []
         for hot in hot_arr:
-            content.append(Plain(hot))
+            content.append(Plain(hot + "\n"))
         return CommandResult(chain=[Node(
             uin=905617992,
             name="Soulter",
