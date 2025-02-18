@@ -32,6 +32,8 @@ class Main:
             return await self.today_info_desc(event, context)
         if args[1] == "nga":
             return await self.send_nga_hot(event, context)
+        if args[1] == "test":
+            return CommandResult(chain=[Plain(f"测试")])
         if args[1] == "help":
             return CommandResult().message(help_msg)
         return CommandResult().message("指令错误喵~")
