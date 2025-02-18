@@ -52,18 +52,12 @@ class Main:
         return CommandResult().message('\n'.join(self.holiday_process.getTodayDesc()))
 
     async def send_nga_hot(self, event: AstrMessageEvent, context: Context):
-        self.logger.info("send_nga_hot")
         hot_arr = await self.ngq_qfc.get_hot()
-        self.logger.info(hot_arr)
-        nodes = []
-        for hot in hot_arr:
-            node = Node(
+        return CommandResult(chain=[Node(
                 uin=905617992,
                 name="Soulter",
-                content=[Plain(hot)]
-            )
-            nodes.append(node)
-        return CommandResult(chain=nodes)
+                content=hot_arr
+            )])
 
     async def send_v2ex_hot(self, event: AstrMessageEvent, context: Context):
         self.logger.info("send_v2ex_hot")
