@@ -31,7 +31,8 @@ class Main:
         if args[1] == "today":
             return self.today_info_desc(event, context)
         if args[1] == "nga":
-            return self.send_nga_hot(event, context)
+            self.send_nga_hot(event, context)
+            return CommandResult().message(1)
         if args[1] == "help":
             return CommandResult().message(help_msg)
         return CommandResult().message("指令错误喵~")
@@ -46,9 +47,7 @@ class Main:
         content = []
         for hot in hot_arr:
             content.append(Plain(hot))
-        return CommandResult(
-            chain=content,
-        )
+        yield event.chain_result(content)
 
     async def send_v2ex_hot(self, event: AstrMessageEvent, context: Context):
         self.logger.info("send_v2ex_hot")
@@ -57,6 +56,4 @@ class Main:
         content = []
         for hot in hot_arr:
             content.append(Plain(hot))
-        return CommandResult(
-            chain=content,
-        )
+        yield event.chain_result(content)
