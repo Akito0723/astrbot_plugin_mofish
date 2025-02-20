@@ -1,15 +1,16 @@
 import logging
 import os
 import json
+import asyncio
 from .holiday import Holiday
 from .hot_handler.v2ex_hot_handler import V2exHotHandler
 from .hot_handler.nga_qfx_hot_handler import NGAQFXHotHandler
 from astrbot.api.all import Context, AstrMessageEvent, CommandResult
 from astrbot.api.message_components import Node, Plain, Image
+from astrbot.core.platform.sources.aiocqhttp.aiocqhttp_message_event import AiocqhttpMessageEvent
 import apscheduler
 import apscheduler.schedulers
 import apscheduler.schedulers.asyncio
-import asyncio
 
 
 class AstrbotPluginMofish:
@@ -25,24 +26,22 @@ class AstrbotPluginMofish:
         # NGA晴风村热帖
         self.ngq_qfc = NGAQFXHotHandler()
 
-        self.scheduler = apscheduler.schedulers.asyncio.AsyncIOScheduler()
-
-        # 加载订阅了每日摸鱼的会话号
-        try:
-            self.config_data_file = f"data/{self.NAMESPACE}_data.json"
-            if not os.path.exists(self.config_data_file):
-                with open(self.config_data_file, "w") as f:
-                    json.dump({}, f)
-            with open(self.config_data_file, "r") as f:
-                self.data = json.load(f)
-            self.auto_daily_mofish_ids = self.data.get("auto_daily_mofish_ids", [])
-
-            if self.auto_daily_mofish_ids:
-                self._start_cron_if_not()
-        except Exception as e:
-            self.logger.error(f"加载订阅了每日摸鱼的会话号出现异常:{e}")
-
-
+        # self.scheduler = apscheduler.schedulers.asyncio.AsyncIOScheduler()
+        #
+        # # 加载订阅了每日摸鱼的会话号
+        # try:
+        #     self.config_data_file = f"data/{self.NAMESPACE}_data.json"
+        #     if not os.path.exists(self.config_data_file):
+        #         with open(self.config_data_file, "w") as f:
+        #             json.dump({}, f)
+        #     with open(self.config_data_file, "r") as f:
+        #         self.data = json.load(f)
+        #     self.auto_daily_mofish_ids = self.data.get("auto_daily_mofish_ids", [])
+        #
+        #     if self.auto_daily_mofish_ids:
+        #         self._start_cron_if_not()
+        # except Exception as e:
+        #     self.logger.error(f"加载订阅了每日摸鱼的会话号出现异常:{e}")
 
     async def mofish(self, event: AstrMessageEvent, context: Context):
         args = event.message_str.split(" ")
@@ -63,7 +62,8 @@ class AstrbotPluginMofish:
         if args[1] == "hot_v2ex":
             return await self.send_v2ex_hot(event, context)
         if args[1] == "auto":
-            return await self.auto_daily_problem(event, context)
+            # return await self.auto_.daily_problem(event, context)
+            pass
         if args[1] == "test":
             await self.test(event, context)
             return CommandResult().message("test~")
@@ -101,48 +101,47 @@ class AstrbotPluginMofish:
             content=content
         )])
 
-    async def _send_daily_mofish(self):
-        self.logger.info(f"正在推送每日摸鱼信息给 {len(self.auto_daily_mofish_ids)} 个会话...")
-        # 今日信息
-        today_desc_arr = self.holiday.getTodayDesc()
-        # 鱼塘热榜
-        # v2ex_hot_arr = await self.v2ex.get_hot()
-        # ngq_qfc_hot_arr = await self.ngq_qfc.get_hot()
-        for session_id in self.auto_daily_mofish_ids:
-            await self.context.send_message(session_id, CommandResult().message('\n'.join(today_desc_arr)))
-            await asyncio.sleep(1)
+    # async def _send_daily_mofish(self):
+    #     self.logger.info(f"正在推送每日摸鱼信息给 {len(self.auto_daily_mofish_ids)} 个会话...")
+    #     # 今日信息
+    #     today_desc_arr = self.holiday.getTodayDesc()
+    #     # 鱼塘热榜
+    #     # v2ex_hot_arr = await self.v2ex.get_hot()
+    #     # ngq_qfc_hot_arr = await self.ngq_qfc.get_hot()
+    #     for session_id in self.auto_daily_mofish_ids:
+    #         await self.context.send_message(session_id, CommandResult().message('\n'.join(today_desc_arr)))
+    #         await asyncio.sleep(1)
 
     # 启动每日摸鱼定时任务
-    def _start_cron_if_not(self):
-        if not self.scheduler.get_jobs():
-            self.scheduler.add_job(self._send_daily_mofish, "cron", hour=9, minute=0)
-            self.scheduler.start()
-
-    async def auto_daily_problem(self, event: AstrMessageEvent, context: Context):
-        # 启动/关闭每日 9 点发送摸鱼信息
-        umo_id = event.unified_msg_origin
-        opened = False
-        if umo_id in self.auto_daily_mofish_ids:
-            self.auto_daily_mofish_ids.remove(umo_id)
-        else:
-            self.auto_daily_mofish_ids.append(umo_id)
-            opened = True
-
-        self.data["auto_daily_mofish_ids"] = self.auto_daily_mofish_ids
-        with open(self.config_data_file, "w") as f:
-            json.dump(self.data, f)
-
-        self._start_cron_if_not()
-
-        if opened:
-            return CommandResult().message(f"已对 {umo_id} 开启每日摸鱼")
-        return CommandResult().message(f"已对 {umo_id} 关闭每日摸鱼")
+    # def _start_cron_if_not(self):
+    #     if not self.scheduler.get_jobs():
+    #         self.scheduler.add_job(self._send_daily_mofish, "cron", hour=9, minute=0)
+    #         self.scheduler.start()
+    #
+    # async def auto_daily_problem(self, event: AstrMessageEvent, context: Context):
+    #     # 启动/关闭每日 9 点发送摸鱼信息
+    #     umo_id = event.unified_msg_origin
+    #     opened = False
+    #     if umo_id in self.auto_daily_mofish_ids:
+    #         self.auto_daily_mofish_ids.remove(umo_id)
+    #     else:
+    #         self.auto_daily_mofish_ids.append(umo_id)
+    #         opened = True
+    #
+    #     self.data["auto_daily_mofish_ids"] = self.auto_daily_mofish_ids
+    #     with open(self.config_data_file, "w") as f:
+    #         json.dump(self.data, f)
+    #
+    #     self._start_cron_if_not()
+    #
+    #     if opened:
+    #         return CommandResult().message(f"已对 {umo_id} 开启每日摸鱼")
+    #     return CommandResult().message(f"已对 {umo_id} 关闭每日摸鱼")
 
     # 发送多条转发消息
     async def _send_forward_msg(self, event: AstrMessageEvent, context: Context, message_arr: list[str], source: str):
         if event.get_platform_name() == "aiocqhttp":
             # qq
-            from astrbot.core.platform.sources.aiocqhttp.aiocqhttp_message_event import AiocqhttpMessageEvent
             assert isinstance(event, AiocqhttpMessageEvent)
             client = event.bot  # 得到 client
             messages = []
