@@ -66,7 +66,7 @@ class Main:
             # pass
         if args[1] == "test":
             await self.test(event, context)
-            return None
+            return CommandResult()
         if args[1] == "help":
             return CommandResult().message(help_msg)
         return CommandResult().message("指令错误喵~")
