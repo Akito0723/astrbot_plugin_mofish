@@ -1,6 +1,6 @@
 import aiohttp
 import logging
-import datetime
+import re
 from lxml import etree
 from bs4 import BeautifulSoup
 
@@ -29,6 +29,9 @@ class NGAQFXHotHandler:
                         for a_tag in soup.find_all('a'):
                             url = a_tag.get('href')
                             title = a_tag.text
+                            # 使用正则表达式移除 "1." 这样的前缀
+                            title = re.sub(r'^\d+\.\s*', '', title)
+                            url = url.replace("nga.178.com", "bbs.nga.cn", 1)
                             hot_arr.append(f"标题: {title}\n链接: {url}")
                     return hot_arr
                 except Exception as e:
