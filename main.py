@@ -28,16 +28,21 @@ class AstrbotPluginMofish:
         self.scheduler = apscheduler.schedulers.asyncio.AsyncIOScheduler()
 
         # 加载订阅了每日摸鱼的会话号
-        self.config_data_file = f"data/{self.NAMESPACE}_data.json"
-        if not os.path.exists(self.config_data_file):
-            with open(self.config_data_file, "w") as f:
-                json.dump({}, f)
-        with open(self.config_data_file, "r") as f:
-            self.data = json.load(f)
-        self.auto_daily_mofish_ids = self.data.get("auto_daily_mofish_ids", [])
+        try:
+            self.config_data_file = f"data/{self.NAMESPACE}_data.json"
+            if not os.path.exists(self.config_data_file):
+                with open(self.config_data_file, "w") as f:
+                    json.dump({}, f)
+            with open(self.config_data_file, "r") as f:
+                self.data = json.load(f)
+            self.auto_daily_mofish_ids = self.data.get("auto_daily_mofish_ids", [])
 
-        if self.auto_daily_mofish_ids:
-            self._start_cron_if_not()
+            if self.auto_daily_mofish_ids:
+                self._start_cron_if_not()
+        except Exception as e:
+            self.logger.error(f"加载订阅了每日摸鱼的会话号出现异常:{e}")
+
+
 
     async def mofish(self, event: AstrMessageEvent, context: Context):
         args = event.message_str.split(" ")
