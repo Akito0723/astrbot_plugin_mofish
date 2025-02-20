@@ -47,8 +47,8 @@ class Main:
         args = event.message_str.split(" ")
         help_msg = '\n\n'.join(['每日摸鱼 指令描述',
                                 '/mofish today 今日信息',
-                                '/mofish hot_nga NGA晴风村',
-                                '/mofish hot_v2ex v2ex',
+                                '/mofish hot_nga NGA晴风村热帖',
+                                '/mofish hot_v2ex v2ex热帖',
                                 # '/mofish 喜加一 EPIC 喜加一'
                                 # '/mofish hot_all 所有鱼塘热榜'
                                 '/mofish auto 启动/关闭每日 9 点发送摸鱼信息'
@@ -58,9 +58,11 @@ class Main:
         if args[1] == "today":
             return self.today_info_desc(event, context)
         if args[1] == "hot_nga":
-            return await self.send_nga_hot(event, context)
+            await self.send_nga_hot(event, context)
+            return CommandResult().stop_event()
         if args[1] == "hot_v2ex":
-            return await self.send_v2ex_hot(event, context)
+            await self.send_v2ex_hot(event, context)
+            return CommandResult().stop_event()
         if args[1] == "auto":
             return await self.auto_daily_problem(event, context)
             # pass
@@ -76,30 +78,15 @@ class Main:
 
     async def send_nga_hot(self, event: AstrMessageEvent, context: Context):
         hot_arr = await self.ngq_qfc.get_hot()
-        content = []
-        for hot in hot_arr:
-            content.append(Plain(hot + "\n\n"))
-        return CommandResult(chain=[Node(
-            uin=905617992,
-            name="Soulter",
-            content=content
-        )])
+        await self._send_forward_msg(event, context, hot_arr, "NGA晴风村热帖")
 
     async def test(self, event: AstrMessageEvent, context: Context):
         message_arr = await self.ngq_qfc.get_hot()
         await self._send_forward_msg(event, context, message_arr, "NGA晴风村热帖")
-        return None
 
     async def send_v2ex_hot(self, event: AstrMessageEvent, context: Context):
         hot_arr = await self.v2ex.get_hot()
-        content = []
-        for hot in hot_arr:
-            content.append(Plain(hot + "\n\n"))
-        return CommandResult(chain=[Node(
-            uin=905617992,
-            name="Soulter",
-            content=content
-        )])
+        await self._send_forward_msg(event, context, hot_arr, "v2ex热帖")
 
     async def _send_daily_mofish(self):
         self.logger.info(f"正在推送每日摸鱼信息给 {len(self.auto_daily_mofish_ids)} 个会话...")
@@ -138,7 +125,7 @@ class Main:
             return CommandResult().message(f"已对 {umo_id} 开启每日摸鱼")
         return CommandResult().message(f"已对 {umo_id} 关闭每日摸鱼")
 
-    # 发送多条转发消息
+    # 发送合并转发消息
     async def _send_forward_msg(self, event: AstrMessageEvent, context: Context, message_arr: list[str], source: str):
         if event.get_platform_name() == "aiocqhttp":
             # qq
