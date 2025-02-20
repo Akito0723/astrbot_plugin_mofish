@@ -134,7 +134,7 @@ class AstrbotPluginMofish:
         return CommandResult().message(f"已对 {umo_id} 关闭每日摸鱼")
 
     # 发送多条转发消息
-    async def _send_forward_msg(self, event: AstrMessageEvent, message_arr: list[str], source: str):
+    async def _send_forward_msg(self, event: AstrMessageEvent, context: Context, message_arr: list[str], source: str):
         if event.get_platform_name() == "aiocqhttp":
             # qq
             from astrbot.core.platform.sources.aiocqhttp.aiocqhttp_message_event import AiocqhttpMessageEvent
