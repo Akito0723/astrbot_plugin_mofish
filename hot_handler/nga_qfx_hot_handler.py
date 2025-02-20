@@ -3,7 +3,7 @@ import logging
 import datetime
 from lxml import etree
 from bs4 import BeautifulSoup
-# NGA晴风村
+
 class NGAQFXHotHandler:
 
     def __init__(self):

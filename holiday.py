@@ -78,7 +78,7 @@ class Holiday:
             self._holiday_data = {now.year: json.load(f)}
 
     '''获取今日信息'''
-    def getTodayDesc(self) -> list:
+    def getTodayDesc(self) -> list[str]:
         desc_arr = []
         now = datetime.now()
         # 星期几的处理

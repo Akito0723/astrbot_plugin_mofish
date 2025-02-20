@@ -13,7 +13,7 @@ class V2exHotHandler:
         hot_arr = []
         try:
             async with aiohttp.ClientSession() as session:
-                async with session.get(self.hot_url, timeout=5) as resp:
+                async with session.get(self.hot_url, timeout=10) as resp:
                     if resp.status != 200:
                         self.logger.error(f"v2ex api请求失败, url:{self.hot_url}")
                         hot_arr = ["v2ex api请求失败"]
