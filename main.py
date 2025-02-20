@@ -62,11 +62,11 @@ class Main:
         if args[1] == "hot_v2ex":
             return await self.send_v2ex_hot(event, context)
         if args[1] == "auto":
-            return await self.auto_.daily_problem(event, context)
+            return await self.auto_daily_problem(event, context)
             # pass
         if args[1] == "test":
             await self.test(event, context)
-            return CommandResult().message("test~")
+            return None
         if args[1] == "help":
             return CommandResult().message(help_msg)
         return CommandResult().message("指令错误喵~")
