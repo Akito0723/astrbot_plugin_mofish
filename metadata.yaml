@@ -1,5 +1,5 @@
 name: astrbot_plugin_mofish
-desc: 认认真真地上班，根本不叫赚钱，这是劳动换取报酬。只有偷懒，在上班的时候浑水摸鱼，那才是从你老板那赚到了钱。
+desc: 认认真真地上班，根本不叫赚钱，这是劳动换取报酬。只有偷懒，在上班的时候浑水摸鱼，那才是从你老板那赚到了钱。输入 /mofish help 查看帮助。
 help: 输入 /mofish help 查看帮助。
 version: v1.0.0
 author: Akihiro

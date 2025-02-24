@@ -43,6 +43,9 @@ class Main:
         except Exception as e:
             self.logger.error(f"加载订阅了每日摸鱼的会话号出现异常:{e}")
 
+        config = self.context.get_config()
+        self.logger.info(f"config:{config}")
+
     async def mofish(self, event: AstrMessageEvent, context: Context):
         args = event.message_str.split(" ")
         help_msg = '\n\n'.join(['每日摸鱼 指令描述',
@@ -51,7 +54,7 @@ class Main:
                                 '/mofish hot_v2ex v2ex热帖',
                                 # '/mofish 喜加一 EPIC 喜加一'
                                 # '/mofish hot_all 所有鱼塘热榜'
-                                '/mofish auto 启动/关闭每日 9 点发送摸鱼信息'
+                                '/mofish auto 启动/关闭每日 9 点发送/mofish today 今日信息'
                                 ])
         if len(args) < 2:
             return CommandResult().message(help_msg)
