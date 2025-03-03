@@ -117,7 +117,7 @@ class Holiday:
             else:
                 desc_arr.append(f"距离周末还有{next_weekend_day_diff}天")
                 desc_arr.append(f"距离{next_holiday_day_info['name']}还有{next_holiday_day_diff}天")
-        elif today_info['holiday']:
+        elif not today_info['holiday']:
             # 今天补班 QAQ
             next_weekend_day_info, next_holiday_day_info = self._get_next_weekend_and_holiday(holiday_data, now)
             next_weekend_day_diff = (datetime.strptime(next_weekend_day_info['date'], '%Y-%m-%d') - now).days + 1
